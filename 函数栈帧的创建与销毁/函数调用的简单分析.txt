@@ -1,0 +1,24 @@
+
+
+先压参数，之后call
+call的时候，将下一行的位置压栈
+之后jmp到被调函数的左括号
+
+{：
+push ebp （主调函数的栈底）
+mov ebp, esp（栈帧的交换）
+add esp, 04Ch（栈帧的交换）
+
+return x
+mov eax, dword ptr[x]
+
+}：
+mov esp ebp（栈帧的交换）
+pop ebp（栈帧的交换）
+再jmp到主调函数的下一行(CPU中的PC)
+
+
+
+<=4  eax
+>4 && <8  eax, ebx
+>8  产生临时量带出返回值
