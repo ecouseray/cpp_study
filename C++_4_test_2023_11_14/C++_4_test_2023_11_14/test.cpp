@@ -212,6 +212,246 @@ int main()
 
 
 // 实现一个完善的日期类
+//#include <iostream>
+//using namespace std;
+//
+//class Data
+//{
+//public:
+//	int GetMonthDay(int year, int month)
+//	{
+//		static int days[13] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+//
+//		if (month == 2 && ((year % 4 == 0 && year % 100 != 0) || year % 400 == 0))
+//			return days[2] + 1;
+//
+//		return days[month];
+//	}
+//
+//	Data(int year = 0, int month = 1, int day = 1)
+//	{
+//		if (year >= 0
+//			&& month >= 1 && month <= 12 && day >= 0
+//			&& day <= GetMonthDay(year, month))
+//		{
+//			_year = year;
+//			_month = month;
+//			_day = day;
+//		}
+//		else
+//		{
+//			cout << "非法日期" << endl;
+//		}
+//	}
+//
+//	Data(const Data& d)
+//	{
+//		_year = d._year;
+//		_month = d._month;
+//		_day = d._day;
+//	}
+//
+//	bool operator<(const Data& d)
+//	{
+//		if (_year < d._year)
+//		{
+//			return true;
+//		}
+//		else if (_year == d._year && _month < d._month)
+//		{
+//			return true;
+//		}
+//		else if (_year == d._year && _month == d._month && _day < d._day)
+//		{
+//			return true;
+//		}
+//		else
+//		{
+//			return false;
+//		}
+//	}
+//
+//	bool operator==(const Data& d)
+//	{
+//		return _year == d._year
+//			&& _month == d._month
+//			&& _day == d._day;
+//	}
+//
+//	// 复用的优势，内聚高，维护性强
+//	bool operator<=(const Data& d)
+//	{
+//		// 复用上面的实现
+//		return (*this < d) || (*this == d);
+//	}
+//
+//	bool operator>(const Data& d)
+//	{
+//		return !(*this <= d);
+//	}
+//
+//	bool operator>=(const Data& d)
+//	{
+//		return !(*this < d);
+//	}
+//
+//	bool operator!=(const Data& d)
+//	{
+//		return !(*this == d);
+//	}
+//	void print()
+//	{
+//		cout << _year << "-" << _month << "-" << _day << endl;
+//	}
+//
+//	Data operator+(int day)
+//	{
+//		Data ret = *this;
+//		ret._day += day;
+//		while (ret._day > GetMonthDay(ret._year, ret._month))
+//		{
+//			ret._day -= GetMonthDay(ret._year, ret._month);
+//			ret._month++;
+//			if (ret._month == 13)
+//			{
+//				ret._year++;
+//				ret._month = 1;
+//			}
+//		}
+//		return ret;
+//	}
+//	//Data operator+=(int day)
+//	Data& operator+=(int day)
+//	//因为这里的this是外面存在的，所以可以优化成Data&
+//	{
+//		_day += day;
+//		while (_day > GetMonthDay(_year, _month))
+//		{
+//			_day -= GetMonthDay(_year, _month);
+//			_month++;
+//			if (_month == 13)
+//			{
+//				_year++;
+//				_month = 1;
+//			}
+//		}
+//		return *this;
+//	}
+//
+//	Data& operator-=(int day)
+//	{
+//		_day -= day;
+//		while (_day <= 0)
+//		{
+//			_month--;
+//			_day += GetMonthDay(_year, _month);
+//			
+//			if (_month == 0)
+//			{
+//				_year--;
+//				_month = 13;
+//			}
+//		}
+//		return *this;
+//	}
+//
+//	Data& operator++()
+//	{
+//		*this += 1;
+//		return *this;
+//	}
+//	Data& operator--()
+//	{
+//		*this -= 1;
+//		return *this;
+//	}
+//	int operator-(const Data& d)
+//	{
+//		if (*this < d)
+//			return -1;
+//		if (*this == d)
+//			return 0;
+//
+//		int ret = 0;
+//
+//	}
+//
+//	Data& operator=(const Data& d)
+//	{
+//		if (this != &d)
+//		{
+//			_year = d._year;
+//			_month = d._month;
+//			_day = d._day;
+//		}
+//		return *this;
+//	}
+//private:
+//	int _year;
+//	int _month;
+//	int _day;
+//};
+
+
+// 是否重载一个运算符，要看这个运算符是否对这个类的对象有意义
+
+// 运算符重载是为了让自定义类型像默认类型一样的使用操作符
+/*
+
+	i = j = k;
+	是先将k的值赋给j，这个表达式完成之后有一个返回值，之后再将返回值赋值给i
+	k先赋值给j，j再赋值给i
+
+	再参数和返回值的地方尽量使用引用以减少拷贝构造
+
+*/
+//int main()
+//{
+//	//Data d1(2003, 1, 23);
+//	//d1.print();
+//	//Data d2(2023, 2, 28);
+//	//d2.print();
+//
+//	//Data d3 = d2 + 10;
+//	//d3.print();
+//
+//	//Data d5 = d1 + 30000;
+//	//d5.print();
+//
+//	//Data d4(2003, 1, 1);
+//	//--d4;
+//	//d4.print();
+//	Data d1(2003, 12, 23);
+//	Data d2(2023, 11, 21);  // 调用拷贝构造
+//	Data d4 = d1; // 调用拷贝构造
+//	// 两个对象对存在，或者一个存在一个不存在用于区分是运算符重载还是拷贝构造	
+//	Data d3;
+//	d3 = d1; // 调用运算符重载
+//	d3 = d1 = d2;
+//	d3.print();
+//	return 0;
+//}
+
+
+
+/*
+
+6个默认成员函数
+在我们不自己实现的时候，编译器自己实现的构造析构
+内置类型不做处理，自定义类型去调用他的构造或析构函数
+
+拷贝构造、operator=会进行值拷贝(浅拷贝)
+编译器自动生成浅拷贝（日期类就是这样）
+
+除了operator= 别的运算符编译器不会自动生成
+
+浅拷贝：将对象按字节一个一个拷贝过去
+
+*/
+
+
+
+
 #include <iostream>
 using namespace std;
 
@@ -322,8 +562,12 @@ public:
 	}
 	//Data operator+=(int day)
 	Data& operator+=(int day)
-	//因为这里的this是外面存在的，所以可以优化成Data&
+		//因为这里的this是外面存在的，所以可以优化成Data&
 	{
+		if (day < 0)
+		{
+			*this -= -day;
+		}
 		_day += day;
 		while (_day > GetMonthDay(_year, _month))
 		{
@@ -338,19 +582,39 @@ public:
 		return *this;
 	}
 
+
+	Data operator-(int day)
+	{
+		Data ret = *this;
+		ret._day -= day;
+		while (ret._day <= 0)
+		{
+			ret._month--;
+			if (ret._month == 0)
+			{
+				ret._year--;
+				ret._month = 12;
+			}
+			ret._day += GetMonthDay(ret._year, ret._month);
+		}
+		return ret;
+	}
 	Data& operator-=(int day)
 	{
+		if (day < 0)
+		{
+			*this += -day;
+		}
 		_day -= day;
 		while (_day <= 0)
 		{
 			_month--;
-			_day += GetMonthDay(_year, _month);
-			
 			if (_month == 0)
 			{
 				_year--;
-				_month = 13;
+				_month = 12;
 			}
+			_day += GetMonthDay(_year, _month);
 		}
 		return *this;
 	}
@@ -365,15 +629,11 @@ public:
 		*this -= 1;
 		return *this;
 	}
-	int operator-(const Data& d)
+	Data operator++(int)
 	{
-		if (*this < d)
-			return -1;
-		if (*this == d)
-			return 0;
-
-		int ret = 0;
-
+		Data tmp(*this);
+		*this += 1;
+		return tmp;
 	}
 
 	Data& operator=(const Data& d)
@@ -386,6 +646,29 @@ public:
 		}
 		return *this;
 	}
+
+	int operator-(const Data& d)
+	{
+		// 不使用大的减去小的 的解决方案
+		// 使用 小的往大的加
+		Data max = *this;
+		Data min = d;
+		int flag = 1;
+		if (*this < d)
+		{
+			max = d;
+			min = *this;
+			flag = -1;
+		}
+		int n = 0;
+		while (min != max)
+		{
+			++n;
+			++min;
+		}
+		return n * flag ;
+	}
+
 private:
 	int _year;
 	int _month;
@@ -393,69 +676,15 @@ private:
 };
 
 
-// 是否重载一个运算符，要看这个运算符是否对这个类的对象有意义
-
-// 运算符重载是为了让自定义类型像默认类型一样的使用操作符
-/*
-
-	i = j = k;
-	是先将k的值赋给j，这个表达式完成之后有一个返回值，之后再将返回值赋值给i
-	k先赋值给j，j再赋值给i
-
-	再参数和返回值的地方尽量使用引用以减少拷贝构造
-
-*/
 int main()
 {
-	//Data d1(2003, 1, 23);
-	//d1.print();
-	//Data d2(2023, 2, 28);
-	//d2.print();
-
-	//Data d3 = d2 + 10;
-	//d3.print();
-
-	//Data d5 = d1 + 30000;
-	//d5.print();
-
-	//Data d4(2003, 1, 1);
-	//--d4;
-	//d4.print();
 	Data d1(2003, 12, 23);
-	Data d2(2023, 11, 21);  // 调用拷贝构造
-	Data d4 = d1; // 调用拷贝构造
-	// 两个对象对存在，或者一个存在一个不存在用于区分是运算符重载还是拷贝构造	
-	Data d3;
-	d3 = d1; // 调用运算符重载
-	d3 = d1 = d2;
-	d3.print();
+	Data d2 = d1 - 10000;
+	d2.print();
+	d1.print();
+	
 	return 0;
 }
-
-
-
-/*
-
-6个默认成员函数
-在我们不自己实现的时候，编译器自己实现的构造析构
-内置类型不做处理，自定义类型去调用他的构造或析构函数
-
-拷贝构造、operator=会进行值拷贝(浅拷贝)
-编译器自动生成浅拷贝（日期类就是这样）
-
-除了operator= 别的运算符编译器不会自动生成
-
-浅拷贝：将对象按字节一个一个拷贝过去
-
-*/
-
-
-
-
-
-
-
-
 
 
 
