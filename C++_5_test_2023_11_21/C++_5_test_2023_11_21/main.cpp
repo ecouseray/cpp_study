@@ -66,5 +66,7 @@ const修饰的变量
 类域 + 访问限定符   突破类域
 
 
-
+static 函数不能够调用非static的函数
+非static的函数 能够调用 static的函数
+没有this指针
 */
